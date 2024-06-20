@@ -6,6 +6,8 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",
+    "generate-modules": "node ./scripts/generateModules",
+    "explore-bundle": "node ./scripts/bundleExplorer",
     "start": "react-native start",
     "test": "jest"
   },
@@ -33,5 +35,8 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "yarn@3.6.4"
+  "packageManager": "yarn@3.6.4",
+  "volta": {
+    "node": "18.20.3"
+  }
 }

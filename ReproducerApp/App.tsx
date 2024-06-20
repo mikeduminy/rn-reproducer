@@ -25,6 +25,10 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+// include the generated modules in the bundle
+import {module1} from './generatedModules';
+console.log(module1);
+
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
