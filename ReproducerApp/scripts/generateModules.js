@@ -72,11 +72,9 @@ function writeModules(modules, inPath) {
       import React from 'react';
       import {Text} from 'react-native';
 
-      const ${module.name} = () => {
+      export const ${module.name} = () => {
         return <Text>${module.name}</Text>;
       };
-
-      export default ${module.name};
       `;
     const modulePath = path.join(inPath, module.folder, `${module.name}.js`);
     fs.writeFileSync(modulePath, moduleContent);
@@ -103,10 +101,7 @@ function writeModulesIndex(modules, inPath) {
     const content = dedent`
       ${
         modulesByFolder[folder]
-          .map(
-            module =>
-              `export {default as ${module.name}} from './${module.name}';`,
-          )
+          .map(module => `export { ${module.name} } from './${module.name}';`)
           .join('\n') + '\n'
       }`;
     const modulePath = path.join(inPath, folder);
