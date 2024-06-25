@@ -12,6 +12,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@callstack/repack": "5.0.0-next.2",
+    "@react-native-async-storage/async-storage": "^1.23.1",
     "react": "18.2.0",
     "react-native": "0.74.2"
   },
@@ -23,6 +25,10 @@
     "@react-native/eslint-config": "0.74.84",
     "@react-native/metro-config": "0.74.84",
     "@react-native/typescript-config": "0.74.84",
+    "@rsdoctor/rspack-plugin": "^0.3.4",
+    "@rspack/core": "^0.7.4",
+    "@rspack/plugin-react-refresh": "^0.7.4",
+    "@swc/helpers": "^0.5.11",
     "@types/react": "^18.2.6",
     "@types/react-test-renderer": "^18.0.0",
     "babel-jest": "^29.6.3",

@@ -26,8 +26,8 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 // include the generated modules in the bundle
-import {module1} from './generatedModules';
-console.log(module1);
+import {modules} from './generatedModules';
+console.log(Object.keys(modules));
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -80,6 +80,7 @@ function App(): React.JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
+          <Section title="Step Zero">Make Coffee5</Section>
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.tsx</Text> to change this
             screen and then come back to see your edits.

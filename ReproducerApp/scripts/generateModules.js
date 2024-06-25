@@ -32,7 +32,7 @@ async function main() {
   // single folder which slows down the bundler
   modules.forEach((module, i) => {
     const folder = Math.floor(i / 50);
-    module.folder = folder.toString().padStart(2, '0');
+    module.folder = folder.toString().padStart(Math.log10(numModules), '0');
   });
 
   console.log('Writing module files');
@@ -68,15 +68,15 @@ function writeModules(modules, inPath) {
     if (!fs.existsSync(path.join(inPath, module.folder))) {
       fs.mkdirSync(path.join(inPath, module.folder), {recursive: true});
     }
-    const moduleContent = dedent`
+    const moduleContent =
+      dedent`
       import React from 'react';
       import {Text} from 'react-native';
 
       export const ${module.name} = () => {
-        return <Text>${module.name}</Text>;
-      };
-      `;
-    const modulePath = path.join(inPath, module.folder, `${module.name}.js`);
+        return <Text>{'${module.name}'}</Text>;
+      };` + '\n';
+    const modulePath = path.join(inPath, module.folder, `${module.name}.tsx`);
     fs.writeFileSync(modulePath, moduleContent);
   }
 }
@@ -101,26 +101,28 @@ function writeModulesIndex(modules, inPath) {
     const content = dedent`
       ${
         modulesByFolder[folder]
-          .map(module => `export { ${module.name} } from './${module.name}';`)
+          .map(module => `export {${module.name}} from './${module.name}';`)
           .join('\n') + '\n'
       }`;
     const modulePath = path.join(inPath, folder);
-    fs.writeFileSync(path.join(modulePath, 'index.js'), content);
+    fs.writeFileSync(path.join(modulePath, 'index.ts'), content);
   }
 
   // write root index referencing all folder indexes
+  // enforce lazy loading by using dynamic imports
   const indexContent = dedent`
-    ${
-      Object.keys(modulesByFolder)
-        .map(folder => `import * as module${folder} from './${folder}';`)
-        .join('\n') +
-      '\n' +
-      `export { ${Object.keys(modulesByFolder)
-        .map(x => `module${x}`)
-        .join(', ')} }` +
-      '\n'
+    export const modules = {
+      ${
+        Object.keys(modulesByFolder)
+          .map(folder => `module${folder}: () => import('./${folder}'),`)
+          .join('\n') + '\n'
+        // `export { ${Object.keys(modulesByFolder)
+        //   .map(x => `module${x}`)
+        //   .join(', ')} }` +
+        // '\n'
+      }
     }
     `;
-  const indexPath = path.join(inPath, 'index.js');
+  const indexPath = path.join(inPath, 'index.ts');
   fs.writeFileSync(indexPath, indexContent);
 }
