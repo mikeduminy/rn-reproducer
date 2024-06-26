@@ -7,6 +7,12 @@ const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
  * @type {import('metro-config').MetroConfig}
  */
 const config = {
+  server: {
+    rewriteRequestUrl: url => {
+      console.log('request', url);
+      return url;
+    },
+  },
   transformer: {
     getTransformOptions: () => ({
       transform: {
@@ -14,14 +20,14 @@ const config = {
       },
     }),
   },
-  serializer: {
-    getRunModuleStatement: moduleId =>
-      // If we see this error, it means the module was fully parsed
-      // If we see another error, it means the problem occurred during the bundle parsing
-      `throw new Error("before module execution: ${JSON.stringify(
-        moduleId,
-      )}"); __r(${JSON.stringify(moduleId)});`,
-  },
+  // serializer: {
+  //   getRunModuleStatement: moduleId =>
+  //     // If we see this error, it means the module was fully parsed
+  //     // If we see another error, it means the problem occurred during the bundle parsing
+  //     `throw new Error("before module execution: ${JSON.stringify(
+  //       moduleId,
+  //     )}"); __r(${JSON.stringify(moduleId)});`,
+  // },
 };
 
 module.exports = mergeConfig(getDefaultConfig(__dirname), config);
