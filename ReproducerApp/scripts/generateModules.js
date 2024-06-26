@@ -68,14 +68,15 @@ function writeModules(modules, inPath) {
     if (!fs.existsSync(path.join(inPath, module.folder))) {
       fs.mkdirSync(path.join(inPath, module.folder), {recursive: true});
     }
-    const moduleContent = dedent`
+    const moduleContent =
+      dedent`
       import React from 'react';
       import {Text} from 'react-native';
 
       export const ${module.name} = () => {
         return <Text>${module.name}</Text>;
       };
-      `;
+      ` + '\n';
     const modulePath = path.join(inPath, module.folder, `${module.name}.js`);
     fs.writeFileSync(modulePath, moduleContent);
   }
@@ -98,29 +99,25 @@ function writeModulesIndex(modules, inPath) {
 
   // write index files for each folder
   for (const folder in modulesByFolder) {
-    const content = dedent`
-      ${
-        modulesByFolder[folder]
-          .map(module => `export { ${module.name} } from './${module.name}';`)
-          .join('\n') + '\n'
-      }`;
+    const content =
+      dedent`
+      ${modulesByFolder[folder]
+        .map(module => `export {${module.name}} from './${module.name}';`)
+        .join('\n')}
+    ` + '\n';
     const modulePath = path.join(inPath, folder);
     fs.writeFileSync(path.join(modulePath, 'index.js'), content);
   }
 
   // write root index referencing all folder indexes
-  const indexContent = dedent`
-    ${
-      Object.keys(modulesByFolder)
-        .map(folder => `import * as module${folder} from './${folder}';`)
-        .join('\n') +
-      '\n' +
-      `export { ${Object.keys(modulesByFolder)
-        .map(x => `module${x}`)
-        .join(', ')} }` +
-      '\n'
-    }
-    `;
+  const indexContent =
+    dedent`
+    export const modules = {
+      ${Object.keys(modulesByFolder)
+        .map(folder => `moduleGroup${folder}: require('./${folder}'),`)
+        .join('\n')}
+    };
+    ` + '\n';
   const indexPath = path.join(inPath, 'index.js');
   fs.writeFileSync(indexPath, indexContent);
 }

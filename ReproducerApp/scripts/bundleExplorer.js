@@ -27,9 +27,29 @@ async function main() {
   console.log(`${modules.length} modules found`);
 
   const appModules = modules.filter(
-    ({verboseName}) => !(verboseName.indexOf('node_modules') === -1),
+    ({verboseName}) => verboseName.indexOf('node_modules') === -1,
+  );
+  const nodeModules = modules.filter(
+    ({verboseName}) => verboseName.indexOf('node_modules') > -1,
   );
   console.log(`${appModules.length} app modules found`);
+  console.log(`${nodeModules.length} node modules found`);
+
+  console.log('app modules:');
+  console.log(
+    appModules
+      .sort()
+      .map(module => module.verboseName)
+      .join('\n'),
+  );
+
+  console.log('node modules:');
+  console.log(
+    nodeModules
+      .sort()
+      .map(module => module.verboseName)
+      .join('\n'),
+  );
 
   // console.log(appModules.map(module => module.name).join('\n'));
 

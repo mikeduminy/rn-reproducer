@@ -6,9 +6,13 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",
-    "generate-modules": "node ./scripts/generateModules",
-    "explore-bundle": "node ./scripts/bundleExplorer",
+    "generate-modules": "node scripts/generateModules",
+    "explore-bundle": "node scripts/bundleExplorer",
     "start": "react-native start",
+    "bundle:android": "node scripts/bundle --platform android",
+    "bundle:ios": "node scripts/bundle --platform ios",
+    "bundle:fetch:android": "node scripts/bundleFetch --platform android --output index.android.bundle",
+    "bundle:fetch:ios": "node scripts/bundleFetch --platform ios --output main.jsbundle",
     "test": "jest"
   },
   "dependencies": {
